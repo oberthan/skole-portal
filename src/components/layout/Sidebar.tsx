@@ -9,19 +9,32 @@ import {
   School
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useAuth, UserRole } from '@/contexts/AuthContext';
 
-const navItems = [
+interface NavItem {
+  to: string;
+  icon: typeof LayoutDashboard;
+  label: string;
+  allowedRoles?: UserRole[];
+}
+
+const navItems: NavItem[] = [
   { to: '/', icon: LayoutDashboard, label: 'Dashboard' },
   { to: '/elever', icon: Users, label: 'Elever' },
-  { to: '/laerere', icon: GraduationCap, label: 'Lærere' },
+  { to: '/laerere', icon: GraduationCap, label: 'Lærere', allowedRoles: ['admin', 'lærer'] },
   { to: '/klasser', icon: School, label: 'Klasser' },
   { to: '/fag', icon: BookOpen, label: 'Fag' },
   { to: '/skema', icon: Calendar, label: 'Skema' },
-  { to: '/lokaler', icon: DoorOpen, label: 'Lokaler' },
+  { to: '/lokaler', icon: DoorOpen, label: 'Lokaler', allowedRoles: ['admin', 'lærer'] },
 ];
 
 export function Sidebar() {
   const location = useLocation();
+  const { user, hasPermission } = useAuth();
+
+  const visibleItems = navItems.filter(item => 
+    !item.allowedRoles || hasPermission(item.allowedRoles)
+  );
 
   return (
     <aside className="fixed left-0 top-0 z-40 h-screen w-64 bg-card border-r border-border">
@@ -36,7 +49,7 @@ export function Sidebar() {
       </div>
       
       <nav className="space-y-1 p-4">
-        {navItems.map((item) => {
+        {visibleItems.map((item) => {
           const isActive = location.pathname === item.to;
           return (
             <NavLink
