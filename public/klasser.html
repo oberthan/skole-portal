@@ -1,15 +1,42 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Klasser - Lovable App</title>
     <script src="https://cdn.tailwindcss.com"></script>
-  </head>
-  <body class="bg-gray-100">
-    <div class="container mx-auto px-4 py-8">
-      <h1 class="text-3xl font-bold mb-4">Klasser</h1>
-      <p class="text-gray-700">This is the Klasser page.</p>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
+    <div id="sidebar-container"></div>
+    <div class="flex flex-col">
+        <div id="header-container"></div>
+        <main class="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">
+            <div class="rounded-lg border bg-card text-card-foreground shadow-sm">
+                <div class="p-6">
+                    <h3 class="text-lg font-semibold">Klasseliste</h3>
+                </div>
+                <div class="p-6 pt-0">
+                    <table class="w-full">
+                        <thead>
+                        <tr class="border-b">
+                            <th class="p-4 text-left">Klasse</th>
+                            <th class="p-4 text-left">Klasselærer</th>
+                        </tr>
+                        </thead>
+                        <tbody id="klasser-table-body">
+                          <tr>
+                            <td colspan="2" class="p-4 text-center">Loading classes...</td>
+                          </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
     </div>
-  </body>
+</div>
+<script src="layout.js"></script>
+<script src="klasser.js"></script>
+</body>
 </html>

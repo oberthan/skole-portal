@@ -1,15 +1,106 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Dashboard - Lovable App</title>
     <script src="https://cdn.tailwindcss.com"></script>
-  </head>
-  <body class="bg-gray-100">
-    <div class="container mx-auto px-4 py-8">
-      <h1 class="text-3xl font-bold mb-4">Dashboard</h1>
-      <p class="text-gray-700">Welcome to your dashboard!</p>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
+    <div id="sidebar-container"></div>
+    <div class="flex flex-col">
+        <div id="header-container"></div>
+        <main class="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">
+            <div class="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4">
+                <div class="rounded-lg border bg-card text-card-foreground shadow-sm">
+                    <div class="p-6 flex flex-row items-center justify-between space-y-0 pb-2">
+                        <h3 class="text-sm font-medium tracking-tight">Elever</h3>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                             class="h-4 w-4 text-muted-foreground">
+                            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="9" cy="7" r="4"></circle>
+                            <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                        </svg>
+                    </div>
+                    <div class="p-6 pt-0">
+                        <div id="elever-count" class="text-2xl font-bold">...</div>
+                        <p class="text-xs text-muted-foreground">+0 denne måned</p>
+                    </div>
+                </div>
+                <div class="rounded-lg border bg-card text-card-foreground shadow-sm">
+                    <div class="p-6 flex flex-row items-center justify-between space-y-0 pb-2">
+                        <h3 class="text-sm font-medium tracking-tight">Lærere</h3>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                             class="h-4 w-4 text-muted-foreground">
+                            <path d="m16 14 1.3-1.3a2 2 0 1 1 3.4 1.4l-3.35 3.35a2 2 0 0 1-2.83 0l-.7-.7-3.35-3.35a2 2 0 0 1 0-2.83l.7-.7a2 2 0 0 1 2.83 0L14 12"/>
+                            <path d="M12 16h2a2 2 0 0 0 2-2v-2a2 2 0 0 0-2-2h-2v8Z"/>
+                            <path d="M8 12h2a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2H8v-8Z"/>
+                            <path d="M12 8V6a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v2"/>
+                        </svg>
+                    </div>
+                    <div class="p-6 pt-0">
+                        <div id="laerere-count" class="text-2xl font-bold">...</div>
+                    </div>
+                </div>
+                <div class="rounded-lg border bg-card text-card-foreground shadow-sm">
+                    <div class="p-6 flex flex-row items-center justify-between space-y-0 pb-2">
+                        <h3 class="text-sm font-medium tracking-tight">Klasser</h3>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                             class="h-4 w-4 text-muted-foreground">
+                            <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/>
+                        </svg>
+                    </div>
+                    <div class="p-6 pt-0">
+                        <div id="klasser-count" class="text-2xl font-bold">...</div>
+                    </div>
+                </div>
+                <div class="rounded-lg border bg-card text-card-foreground shadow-sm">
+                    <div class="p-6 flex flex-row items-center justify-between space-y-0 pb-2">
+                        <h3 class="text-sm font-medium tracking-tight">Fag</h3>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                             class="h-4 w-4 text-muted-foreground">
+                            <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+                            <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+                        </svg>
+                    </div>
+                    <div class="p-6 pt-0">
+                        <div id="fag-count" class="text-2xl font-bold">...</div>
+                    </div>
+                </div>
+            </div>
+            <div class="grid gap-4 md:gap-8 lg:grid-cols-2 xl:grid-cols-3">
+                <div class="rounded-lg border bg-card text-card-foreground shadow-sm xl:col-span-2">
+                    <div class="p-6 flex flex-row items-center justify-between space-y-0 pb-2">
+                        <h3 class="text-lg font-semibold">Dagens Skema</h3>
+                    </div>
+                    <div class="p-6 pt-0">
+                        <div id="schedule-container" class="space-y-4">
+                            <p>Loading schedule...</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="rounded-lg border bg-card text-card-foreground shadow-sm">
+                    <div class="p-6 flex flex-row items-center justify-between space-y-0 pb-2">
+                        <h3 class="text-lg font-semibold">Seneste Elever</h3>
+                    </div>
+                    <div class="p-6 pt-0">
+                        <div id="recent-students-container" class="space-y-4">
+                            <p>Loading recent students...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
     </div>
-  </body>
+</div>
+<script src="layout.js"></script>
+<script src="dashboard.js"></script>
+</body>
 </html>

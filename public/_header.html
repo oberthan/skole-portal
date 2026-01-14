@@ -1,0 +1,36 @@
+<header class="flex h-14 items-center gap-4 border-b bg-muted/40 px-4 lg:h-[60px] lg:px-6">
+    <div class="w-full flex-1">
+        <h1 class="text-lg font-semibold md:text-2xl" id="page-title">Dashboard</h1>
+    </div>
+    <div class="flex items-center gap-4">
+        <form class="relative">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                 class="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground">
+                <circle cx="11" cy="11" r="8"></circle>
+                <path d="m21 21-4.3-4.3"></path>
+            </svg>
+            <input type="search"
+                   class="pl-8 sm:w-[300px] md:w-[200px] lg:w-[300px] bg-background h-10 rounded-md border border-input px-3 py-2 text-sm ring-offset-background"
+                   placeholder="Søg...">
+        </form>
+        <button
+                class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground h-10 w-10 relative">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5">
+                <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path>
+                <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"></path>
+            </svg>
+            <span class="absolute top-1 right-1 flex h-3 w-3">
+                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75"></span>
+                <span class="relative inline-flex rounded-full h-3 w-3 bg-sky-500"></span>
+            </span>
+        </button>
+        <div class="relative">
+            <button class="flex items-center gap-2" id="user-menu-button">
+                <span>Admin Hansen</span>
+                <img src="https://i.pravatar.cc/40" alt="Admin Hansen" class="h-8 w-8 rounded-full"/>
+            </button>
+        </div>
+    </div>
+</header>
