@@ -18,6 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
             .then(data => {
                 headerContainer.innerHTML = data;
                 updatePageTitle();
+                loadUserProfile();
             });
     }
 
@@ -40,6 +41,50 @@ document.addEventListener('DOMContentLoaded', () => {
         if (titleElement) {
             const pageTitle = document.title.split(' - ')[0];
             titleElement.textContent = pageTitle;
+        }
+    }
+    async function loadUserProfile() {
+        try {
+            const res = await fetch('/api/getProfile');
+            if (!res.ok) return;
+
+            const user = await res.json();
+            const nameEl = document.getElementById('user-name');
+            const roleEl = document.getElementById('user-role');
+            const avatarEl = document.getElementById('user-avatar');
+
+            let colors = {
+                'elev': '#00d800',
+                'laerer': '#0000ff',
+                'admin': '#ff0000',
+            }
+
+            if (nameEl) nameEl.textContent = user.navn;
+            if (roleEl){
+                roleEl.textContent = user.rolle.toUpperCase();
+                roleEl.style.color = colors[user.rolle];
+                roleEl.style.border = `1px solid ${colors[user.rolle]}`;
+            }
+            if (avatarEl) {
+                avatarEl.src = user.avatar;
+                avatarEl.alt = user.navn;
+            }
+
+            if (user.rolle === 'admin') {
+                document.getElementById('add-elever-btn').style.display = 'inline-block';
+                document.getElementById('add-laerere-btn').style.display = 'inline-block';
+                document.getElementById('add-lokaler-btn').style.display = 'inline-block';
+                document.getElementById('add-fag-btn').style.display = 'inline-block';
+            }
+
+            if (['admin', 'laerer'].includes(user.rolle)) {
+                document.getElementById('add-klasser-btn').style.display = 'inline-block';
+                document.getElementById('add-skema-btn').style.display = 'inline-block';
+                document.getElementById('add-karakter-btn').style.display = 'inline-block';
+                document.getElementById('add-klasse-elever-btn').style.display = 'inline-block';
+            }
+        } catch (err) {
+            console.error('Error loading profile:', err);
         }
     }
 });

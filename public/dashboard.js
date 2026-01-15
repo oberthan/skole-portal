@@ -23,9 +23,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         scheduleItem.innerHTML = `
           <div>
             <p class="font-semibold">${item.fag.navn}</p>
-            <p class="text-sm text-muted-foreground">${item.lærere.navn} • ${item.klasser.navn}</p>
+            <p class="text-sm text-muted-foreground">${item.lærer.navn} • ${item.klasser.fag.navn}</p>
           </div>
-          <p class="text-sm text-muted-foreground">${item.start_tid} - ${item.slut_tid}</p>
+          <p class="text-sm text-muted-foreground">${item.start} - ${item.slut}</p>
         `;
         scheduleContainer.appendChild(scheduleItem);
       });
@@ -50,11 +50,11 @@ document.addEventListener('DOMContentLoaded', async () => {
             </span>
             <div>
               <p class="font-semibold">${student.navn}</p>
-              <p class="text-sm text-muted-foreground">${student.email}</p>
+              <p class="text-sm text-muted-foreground">${student.årgang}</p>
             </div>
           </div>
-          <p class="text-sm text-muted-foreground">${student.klasser.navn}</p>
         `;
+        //<p class="text-sm text-muted-foreground">${student.klasser.fag.navn}</p>
         recentStudentsContainer.appendChild(studentItem);
       });
     } else {

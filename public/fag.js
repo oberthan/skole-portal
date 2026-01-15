@@ -6,14 +6,14 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     const tableBody = document.getElementById('fag-table-body');
     tableBody.innerHTML = '';
-
+    console.log(fag)
     if (fag.length > 0) {
       fag.forEach(subject => {
         const row = document.createElement('tr');
         row.className = 'border-b';
         row.innerHTML = `
           <td class="p-4">${subject.navn}</td>
-          <td class="p-4">${subject.lærere ? subject.lærere.navn : 'N/A'}</td>
+          <td class="p-4">${subject.niveau ? subject.niveau : 'N/A'}</td>
         `;
         tableBody.appendChild(row);
       });
