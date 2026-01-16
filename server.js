@@ -331,6 +331,33 @@ app.post('/api/addElev', isAuthenticated, async (req, res) => {
   }
 });
 
+app.post('/api/addKlasse', isAuthenticated, async (req, res) => {
+  try {
+    let { laerer, fag } = req.body;
+
+    const { data: klasseData, error: klasseError } = await supabase
+        .from('klasser')
+        .insert([{ lærer:laerer, fag}])
+        .select()
+        .single();
+
+    if (klasseError){console.log("KlasseError");
+      throw klasseError;}
+
+
+    res.json({
+      message: 'Klasse created successfully',
+      klasse: klasseData
+
+    });
+
+  } catch (err) {
+    console.error('Error adding klasse:', err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+
 app.get('/logout', (req, res) => {
   req.session.destroy(err => {
     if (err) {

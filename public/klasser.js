@@ -26,3 +26,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     tableBody.innerHTML = '<tr><td colspan="2" class="p-4 text-center">Error loading data.</td></tr>';
   }
 });
+
+document.addEventListener('userLoaded', (e) => {
+  if (user.rolle === 'admin' || user.rolle === 'laerer') {
+
+  }
+});

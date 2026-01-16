@@ -20,6 +20,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     } else {
       tableBody.innerHTML = '<tr><td colspan="3" class="p-4 text-center">No students found.</td></tr>';
     }
+
+
   } catch (error) {
     console.error('Error loading elever data:', error);
     const tableBody = document.getElementById('elever-table-body');
@@ -31,6 +33,11 @@ document.addEventListener('DOMContentLoaded', async () => {
   const closeBtn = document.getElementById('close-elev-modal');
   const form = document.getElementById('add-elev-form');
   const feedback = document.getElementById('elev-feedback');
+
+  document.addEventListener('userLoaded', (e) => {
+    if (user.rolle === 'admin') {
+      addBtn.classList.remove("hidden");}
+  });
 
   // Open modal
   addBtn.addEventListener('click', () => {
@@ -75,7 +82,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       if (!res.ok) {
         feedback.textContent = `Error: ${data.error}`;
       } else {
-        feedback.textContent = `Elev "${data.elev.navn}" created!`;
+        feedback.innerHTML = `Elev "<span style="color: black;">${data.elev.navn}</span>" created!<br>They can log in with the username: "<span style="font-weight:bold; color:black;">${data.email.split("@")[0]}</span>"<br>and the password: "<span style="font-weight:bold; color:black;">${data.password}</span>"`;
         form.reset();
         //loadElever(); // reload table
       }

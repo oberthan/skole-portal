@@ -1,3 +1,4 @@
+let user;
 document.addEventListener('DOMContentLoaded', () => {
     const sidebarContainer = document.getElementById('sidebar-container');
     const headerContainer = document.getElementById('header-container');
@@ -48,7 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const res = await fetch('/api/getProfile');
             if (!res.ok) return;
 
-            const user = await res.json();
+            user = await res.json();
             const nameEl = document.getElementById('user-name');
             const roleEl = document.getElementById('user-role');
             const avatarEl = document.getElementById('user-avatar');
@@ -70,18 +71,21 @@ document.addEventListener('DOMContentLoaded', () => {
                 avatarEl.alt = user.navn;
             }
 
+            const event = new CustomEvent('userLoaded');
+            document.dispatchEvent(event);
+
             if (user.rolle === 'admin') {
-                document.getElementById('add-elever-btn').style.display = 'inline-block';
-                document.getElementById('add-laerere-btn').style.display = 'inline-block';
-                document.getElementById('add-lokaler-btn').style.display = 'inline-block';
-                document.getElementById('add-fag-btn').style.display = 'inline-block';
+                //document.getElementById('add-elev-btn').classList.remove("hidden");
+                //document.getElementById('add-laerere-btn').style.display = 'inline-block';
+                //document.getElementById('add-lokaler-btn').style.display = 'inline-block';
+                //document.getElementById('add-fag-btn').style.display = 'inline-block';
             }
 
             if (['admin', 'laerer'].includes(user.rolle)) {
-                document.getElementById('add-klasser-btn').style.display = 'inline-block';
-                document.getElementById('add-skema-btn').style.display = 'inline-block';
-                document.getElementById('add-karakter-btn').style.display = 'inline-block';
-                document.getElementById('add-klasse-elever-btn').style.display = 'inline-block';
+                //document.getElementById('add-klasser-btn').style.display = 'inline-block';
+                //document.getElementById('add-skema-btn').style.display = 'inline-block';
+                //document.getElementById('add-karakter-btn').style.display = 'inline-block';
+                //document.getElementById('add-klasse-elever-btn').style.display = 'inline-block';
             }
         } catch (err) {
             console.error('Error loading profile:', err);
