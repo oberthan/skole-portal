@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Karakterer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
+    <div id="sidebar-container"></div>
+    <div class="flex flex-col">
+        <div id="header-container"></div>
+        <main class="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">
+            <div class="rounded-lg border bg-card text-card-foreground shadow-sm">
+                <div class="p-6">
+                    <h3 class="text-lg font-semibold">Karakterer</h3>
+                </div>
+                <div class="p-6 pt-0">
+                    <table class="w-full">
+                        <thead>
+                        <tr class="border-b">
+                            <th class="p-4 text-left">Elev</th>
+                            <th class="p-4 text-left">Fag</th>
+                            <th class="p-4 text-left">Karakter</th>
+                            <th class="p-4 text-left">Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody id="karakterer-table-body">
+                          <tr>
+                            <td colspan="4" class="p-4 text-center">Loading karakterer...</td>
+                          </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div id="add-karakter-container" class="hidden rounded-lg border bg-card text-card-foreground shadow-sm">
+                <div class="p-6">
+                    <h3 class="text-lg font-semibold">Tilføj ny karakter</h3>
+                </div>
+                <div class="p-6 pt-0">
+                    <form id="add-karakter-form" class="flex flex-col gap-3">
+                        <select name="elev" class="border p-2 rounded" required></select>
+                        <select name="fag" class="border p-2 rounded" required></select>
+                        <input type="number" name="karakter" placeholder="Karakter" class="border p-2 rounded" required>
+                        <button type="submit" class="bg-blue-500 text-white rounded px-3 py-2 hover:bg-blue-600">Tilføj</button>
+                    </form>
+                    <div id="add-karakter-feedback" class="mt-2 text-sm text-red-500"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+<script src="layout.js"></script>
+<script src="karakterer.js"></script>
+</body>
+</html>

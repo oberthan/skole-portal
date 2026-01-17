@@ -26,6 +26,30 @@ const isAuthenticated = (req, res, next) => {
   res.redirect('/login.html');
 };
 
+// Middleware for role-based access control
+const checkRole = (roles) => async (req, res, next) => {
+  try {
+    const userId = req.session.user.id;
+    const { data, error } = await supabase
+      .from('user_profiles')
+      .select('rolle')
+      .eq('id', userId)
+      .single();
+
+    if (error || !data) {
+      return res.status(403).json({ error: 'Forbidden' });
+    }
+
+    if (roles.includes(data.rolle)) {
+      return next();
+    }
+
+    res.status(403).json({ error: 'Forbidden' });
+  } catch (err) {
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
 // Routes
 app.get('/', (req, res) => {
     if (req.session.user) {
@@ -72,12 +96,24 @@ app.get('/elever', isAuthenticated, (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'elever.html'));
 });
 
+app.get('/elev', isAuthenticated, (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'elev.html'));
+});
+
 app.get('/laerere', isAuthenticated, (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'laerere.html'));
 });
 
+app.get('/laerer', isAuthenticated, (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'laerer.html'));
+});
+
 app.get('/klasser', isAuthenticated, (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'klasser.html'));
+});
+
+app.get('/klasse', isAuthenticated, (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'klasse.html'));
 });
 
 app.get('/fag', isAuthenticated, (req, res) => {
@@ -92,7 +128,124 @@ app.get('/lokaler', isAuthenticated, (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'lokaler.html'));
 });
 
+app.get('/profile', isAuthenticated, (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'profile.html'));
+});
+
+app.get('/karakterer', isAuthenticated, (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'karakterer.html'));
+});
+
+app.get('/fravaer', isAuthenticated, (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'fravaer.html'));
+});
+
 // API routes
+app.get('/api/fravaer', isAuthenticated, async (req, res) => {
+    try {
+        const userId = req.session.user.id;
+        const { data: profile, error: profileError } = await supabase.from('user_profiles').select('rolle').eq('id', userId).single();
+        if (profileError) throw profileError;
+
+        let query = supabase.from('fravaer').select('id, dato, til_stede, elever(navn), fag(navn)');
+        if (profile.rolle === 'student') {
+            query = query.eq('elev', userId);
+        }
+
+        const { data, error } = await query;
+        if (error) throw error;
+        res.json(data);
+    } catch (error) {
+        console.error('Error fetching fravær:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
+app.post('/api/addFravaer', isAuthenticated, checkRole(['admin', 'staff']), async (req, res) => {
+    try {
+        const { elev, fag, dato, til_stede } = req.body;
+        const { data, error } = await supabase.from('fravaer').insert([{ elev, fag, dato, til_stede }]).select().single();
+        if (error) throw error;
+        res.json({ message: 'Fravær created successfully', fravaer: data });
+    } catch (err) {
+        console.error('Error adding fravær:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+app.delete('/api/fravaer/:id', isAuthenticated, checkRole(['admin', 'staff']), async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { error } = await supabase.from('fravaer').delete().eq('id', id);
+        if (error) throw error;
+        res.json({ message: 'Fravær deleted successfully' });
+    } catch (error) {
+        console.error('Error deleting fravær:', error);
+        res.status(500).json({ error: error.message });
+    }
+});
+
+app.get('/api/karakterer', isAuthenticated, async (req, res) => {
+    try {
+        const userId = req.session.user.id;
+        const { data: profile, error: profileError } = await supabase.from('user_profiles').select('rolle').eq('id', userId).single();
+        if (profileError) throw profileError;
+
+        let query = supabase.from('karakterer').select('id, karakter, elever(navn), fag(navn)');
+        if (profile.rolle === 'student') {
+            query = query.eq('elev', userId);
+        }
+
+        const { data, error } = await query;
+        if (error) throw error;
+        res.json(data);
+    } catch (error) {
+        console.error('Error fetching karakterer:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
+app.post('/api/addKarakter', isAuthenticated, checkRole(['admin', 'staff']), async (req, res) => {
+    try {
+        const { elev, fag, karakter } = req.body;
+        const { data, error } = await supabase.from('karakterer').insert([{ elev, fag, karakter }]).select().single();
+        if (error) throw error;
+        res.json({ message: 'Karakter created successfully', karakter: data });
+    } catch (err) {
+        console.error('Error adding karakter:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+app.delete('/api/karakterer/:id', isAuthenticated, checkRole(['admin', 'staff']), async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { error } = await supabase.from('karakterer').delete().eq('id', id);
+        if (error) throw error;
+        res.json({ message: 'Karakter deleted successfully' });
+    } catch (error) {
+        console.error('Error deleting karakter:', error);
+        res.status(500).json({ error: error.message });
+    }
+});
+
+
+app.get('/api/user-classes', isAuthenticated, async (req, res) => {
+  try {
+    const userId = req.session.user.id;
+    const { data, error } = await supabase
+      .from('klasse_elever')
+      .select('klasser(*, lærere(navn))')
+      .eq('elev', userId);
+
+    if (error) throw error;
+    res.json(data);
+  } catch (error) {
+    console.error("Error fetching user's classes:", error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
 app.get('/api/dashboard-stats', isAuthenticated, async (req, res) => {
   try {
     const { count: elever, error: eleverError } = await supabase.from('elever').select('*', { count: 'exact', head: true });
@@ -155,6 +308,28 @@ app.get('/api/recent-students', isAuthenticated, async (req, res) => {
   }
 });
 
+app.get('/api/elever/:id/details', isAuthenticated, async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { data: elev, error: elevError } = await supabase.from('elever').select('*').eq('id', id).single();
+        if (elevError) throw elevError;
+
+        const { data: schedule, error: scheduleError } = await supabase.from('skema').select('*, klasser(*, lærere(*))').eq('elev_id', id);
+        if (scheduleError) throw scheduleError;
+
+        const { data: grades, error: gradesError } = await supabase.from('karakterer').select('*, fag(*)').eq('elev', id);
+        if (gradesError) throw gradesError;
+
+        const { data: attendance, error: attendanceError } = await supabase.from('fravaer').select('*, fag(*)').eq('elev', id);
+        if (attendanceError) throw attendanceError;
+
+        res.json({ elev, schedule, grades, attendance });
+    } catch (error) {
+        console.error('Error fetching elev details:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
 app.get('/api/elever', isAuthenticated, async (req, res) => {
   try {
     const { data, error } = await supabase
@@ -168,6 +343,25 @@ app.get('/api/elever', isAuthenticated, async (req, res) => {
   }
 });
 
+app.get('/api/laerere/:id/details', isAuthenticated, async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { data: laerer, error: laererError } = await supabase.from('lærere').select('*').eq('id', id).single();
+        if (laererError) throw laererError;
+
+        const { data: schedule, error: scheduleError } = await supabase.from('skema').select('*, klasser(*)').eq('lærer_id', id);
+        if (scheduleError) throw scheduleError;
+
+        const { data: classes, error: classesError } = await supabase.from('klasser').select('*').eq('lærer', id);
+        if (classesError) throw classesError;
+
+        res.json({ laerer, schedule, classes });
+    } catch (error) {
+        console.error('Error fetching laerer details:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
 app.get('/api/laerere', isAuthenticated, async (req, res) => {
   try {
     const { data, error } = await supabase.from('lærere').select('id, navn, initialer');
@@ -179,9 +373,28 @@ app.get('/api/laerere', isAuthenticated, async (req, res) => {
   }
 });
 
+app.get('/api/klasser/:id/details', isAuthenticated, async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { data: klasse, error: klasseError } = await supabase.from('klasser').select('*, lærere(*)').eq('id', id).single();
+        if (klasseError) throw klasseError;
+
+        const { data: schedule, error: scheduleError } = await supabase.from('skema').select('*, lokale(*)').eq('klasse_id', id);
+        if (scheduleError) throw scheduleError;
+
+        const { data: students, error: studentsError } = await supabase.from('klasse_elever').select('*, elever(*)').eq('klasse_id', id);
+        if (studentsError) throw studentsError;
+
+        res.json({ klasse, schedule, students });
+    } catch (error) {
+        console.error('Error fetching klasse details:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
 app.get('/api/klasser', isAuthenticated, async (req, res) => {
   try {
-    const { data, error } = await supabase.from('klasser').select('id, fag, lærer(navn)');
+    const { data, error } = await supabase.from('klasser').select('id, fag, lærer(id, navn)');
     if (error) throw error;
     res.json(data);
   } catch (error) {
@@ -254,7 +467,41 @@ app.get('/api/getProfile', isAuthenticated, async (req, res) => {
   }
 });
 
-app.post('/api/addElev', isAuthenticated, async (req, res) => {
+app.put('/api/elever/:id', isAuthenticated, checkRole(['admin', 'staff']), async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { navn, årgang } = req.body;
+
+    const { data, error } = await supabase
+      .from('elever')
+      .update({ navn, årgang })
+      .eq('id', id)
+      .select()
+      .single();
+
+    if (error) throw error;
+    res.json({ message: 'Elev updated successfully', elev: data });
+  } catch (error) {
+    console.error('Error updating elev:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.delete('/api/elever/:id', isAuthenticated, checkRole(['admin', 'staff']), async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const { error } = await supabase.from('elever').delete().eq('id', id);
+
+    if (error) throw error;
+    res.json({ message: 'Elev deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting elev:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.post('/api/addElev', isAuthenticated, checkRole(['admin', 'staff']), async (req, res) => {
   try {
     let { navn, aargang } = req.body;
 
@@ -331,7 +578,72 @@ app.post('/api/addElev', isAuthenticated, async (req, res) => {
   }
 });
 
-app.post('/api/addKlasse', isAuthenticated, async (req, res) => {
+app.post('/api/addLaerer', isAuthenticated, checkRole(['admin']), async (req, res) => {
+    try {
+        const { navn, initialer } = req.body;
+        if (!navn || !initialer) {
+            return res.status(400).json({ error: 'Missing required fields' });
+        }
+        const { data, error } = await supabase.from('lærere').insert([{ navn, initialer }]).select().single();
+        if (error) throw error;
+        res.json({ message: 'Lærer created successfully', laerer: data });
+    } catch (err) {
+        console.error('Error adding laerer:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+app.put('/api/laerere/:id', isAuthenticated, checkRole(['admin']), async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { navn, initialer } = req.body;
+        const { data, error } = await supabase.from('lærere').update({ navn, initialer }).eq('id', id).select().single();
+        if (error) throw error;
+        res.json({ message: 'Lærer updated successfully', laerer: data });
+    } catch (error) {
+        console.error('Error updating laerer:', error);
+        res.status(500).json({ error: error.message });
+    }
+});
+
+app.delete('/api/laerere/:id', isAuthenticated, checkRole(['admin']), async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { error } = await supabase.from('lærere').delete().eq('id', id);
+        if (error) throw error;
+        res.json({ message: 'Lærer deleted successfully' });
+    } catch (error) {
+        console.error('Error deleting laerer:', error);
+        res.status(500).json({ error: error.message });
+    }
+});
+
+app.put('/api/klasser/:id', isAuthenticated, checkRole(['admin', 'staff']), async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { fag, lærer } = req.body;
+        const { data, error } = await supabase.from('klasser').update({ fag, lærer }).eq('id', id).select().single();
+        if (error) throw error;
+        res.json({ message: 'Klasse updated successfully', klasse: data });
+    } catch (error) {
+        console.error('Error updating klasse:', error);
+        res.status(500).json({ error: error.message });
+    }
+});
+
+app.delete('/api/klasser/:id', isAuthenticated, checkRole(['admin', 'staff']), async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { error } = await supabase.from('klasser').delete().eq('id', id);
+        if (error) throw error;
+        res.json({ message: 'Klasse deleted successfully' });
+    } catch (error) {
+        console.error('Error deleting klasse:', error);
+        res.status(500).json({ error: error.message });
+    }
+});
+
+app.post('/api/addKlasse', isAuthenticated, checkRole(['admin', 'staff']), async (req, res) => {
   try {
     let { laerer, fag } = req.body;
 
