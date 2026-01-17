@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Profile</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
+    <div id="sidebar-container"></div>
+    <div class="flex flex-col">
+        <div id="header-container"></div>
+        <main class="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">
+            <div class="flex items-center">
+                <h1 class="text-lg font-semibold md:text-2xl">Profile</h1>
+            </div>
+            <div class="flex flex-col md:grid md:grid-cols-3 gap-6">
+                <div class="md:col-span-1">
+                    <div class="rounded-lg border bg-card text-card-foreground shadow-sm">
+                        <div class="p-6 flex flex-col items-center">
+                            <img id="user-avatar" src="" alt="User Avatar" class="rounded-full h-24 w-24 mb-4">
+                            <h2 id="user-name" class="text-xl font-semibold"></h2>
+                            <p id="user-role" class="text-muted-foreground"></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="md:col-span-2">
+                    <div class="rounded-lg border bg-card text-card-foreground shadow-sm">
+                        <div class="p-6">
+                            <h3 class="text-lg font-semibold mb-4">Classes</h3>
+                            <div id="classes-container" class="space-y-4">
+                                <!-- Classes will be dynamically inserted here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+<script src="layout.js"></script>
+<script src="profile.js"></script>
+</body>
+</html>

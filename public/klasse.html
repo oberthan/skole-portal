@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Klasse</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
+    <div id="sidebar-container"></div>
+    <div class="flex flex-col">
+        <div id="header-container"></div>
+        <main class="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">
+            <div id="klasse-info" class="rounded-lg border bg-card text-card-foreground shadow-sm p-6">
+                <h1 class="text-2xl font-semibold">Klasse Information</h1>
+                <p><strong>Fag:</strong> <span id="klasse-fag"></span></p>
+                <p><strong>Lærer:</strong> <span id="klasse-laerer"></span></p>
+            </div>
+            <div id="klasse-schedule" class="rounded-lg border bg-card text-card-foreground shadow-sm p-6">
+                <h2 class="text-xl font-semibold">Skema</h2>
+                <table class="w-full">
+                    <thead>
+                        <tr class="border-b">
+                            <th class="p-4 text-left">Start</th>
+                            <th class="p-4 text-left">Slut</th>
+                            <th class="p-4 text-left">Lokale</th>
+                        </tr>
+                    </thead>
+                    <tbody id="schedule-table-body"></tbody>
+                </table>
+            </div>
+            <div id="klasse-students" class="rounded-lg border bg-card text-card-foreground shadow-sm p-6">
+                <h2 class="text-xl font-semibold">Elever</h2>
+                <table class="w-full">
+                    <thead>
+                        <tr class="border-b">
+                            <th class="p-4 text-left">Navn</th>
+                            <th class="p-4 text-left">Årgang</th>
+                        </tr>
+                    </thead>
+                    <tbody id="students-table-body"></tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+</div>
+<script src="layout.js"></script>
+<script src="klasse.js"></script>
+</body>
+</html>
