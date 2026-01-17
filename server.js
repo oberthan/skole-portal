@@ -368,6 +368,10 @@ app.get('/logout', (req, res) => {
   });
 });
 
+app.get('/health-check', (req, res) => {
+  res.status(200).json({});
+});
+
 // 404 handler
 app.use((req, res) => {
     res.status(404).sendFile(path.join(__dirname, 'public', '404.html'));
