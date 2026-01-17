@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   let elever = [];
   let fag = [];
+  let userRole = '';
 
   const loadElever = async () => {
     try {
@@ -43,14 +44,18 @@ document.addEventListener('DOMContentLoaded', () => {
         fravaer.forEach(f => {
           const row = document.createElement('tr');
           row.className = 'border-b';
+
+            let actionsHtml = '';
+            if (userRole === 'admin' || userRole === 'staff') {
+                actionsHtml = `<button class="delete-btn bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600" data-id="${f.id}">Delete</button>`;
+            }
+
           row.innerHTML = `
             <td class="p-4">${f.elever.navn}</td>
             <td class="p-4">${f.fag.navn}</td>
             <td class="p-4">${new Date(f.dato).toLocaleDateString()}</td>
             <td class="p-4">${f.til_stede ? 'Ja' : 'Nej'}</td>
-            <td class="p-4">
-              <button class="delete-btn bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600" data-id="${f.id}">Delete</button>
-            </td>
+            <td class="p-4">${actionsHtml}</td>
           `;
           tableBody.appendChild(row);
         });
@@ -64,9 +69,11 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   document.addEventListener('userLoaded', (e) => {
-    if (user.rolle === 'admin' || user.rolle === 'staff') {
+    userRole = e.detail.rolle;
+    if (userRole === 'admin' || userRole === 'staff') {
       addContainer.classList.remove("hidden");
     }
+    loadFravaer();
   });
 
   addForm.addEventListener('submit', async (e) => {
@@ -104,6 +111,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   tableBody.addEventListener('click', (e) => {
+    e.stopPropagation();
     if (e.target.classList.contains('delete-btn')) {
       const { id } = e.target.dataset;
       if (confirm('Are you sure you want to delete this attendance record?')) {
@@ -119,5 +127,4 @@ document.addEventListener('DOMContentLoaded', () => {
 
   loadElever();
   loadFag();
-  loadFravaer();
 });
