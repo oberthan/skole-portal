@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   let elever = [];
   let fag = [];
+  let userRole = '';
 
   const loadElever = async () => {
     try {
@@ -43,13 +44,17 @@ document.addEventListener('DOMContentLoaded', () => {
         karakterer.forEach(karakter => {
           const row = document.createElement('tr');
           row.className = 'border-b';
+
+          let actionsHtml = '';
+            if (userRole === 'admin' || userRole === 'staff') {
+                actionsHtml = `<button class="delete-btn bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600" data-id="${karakter.id}">Delete</button>`;
+            }
+
           row.innerHTML = `
             <td class="p-4">${karakter.elever.navn}</td>
             <td class="p-4">${karakter.fag.navn}</td>
             <td class="p-4">${karakter.karakter}</td>
-            <td class="p-4">
-              <button class="delete-btn bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600" data-id="${karakter.id}">Delete</button>
-            </td>
+            <td class="p-4">${actionsHtml}</td>
           `;
           tableBody.appendChild(row);
         });
@@ -63,12 +68,11 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   document.addEventListener('userLoaded', (e) => {
-    if (user.rolle === 'admin' || user.rolle === 'staff') {
+    userRole = e.detail.rolle;
+    if (userRole === 'admin' || userRole === 'staff') {
       addContainer.classList.remove("hidden");
     }
-    if(user.rolle === 'student'){
-        // Logic to only show own grades
-    }
+    loadKarakterer();
   });
 
   addForm.addEventListener('submit', async (e) => {
@@ -101,6 +105,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   tableBody.addEventListener('click', (e) => {
+    e.stopPropagation();
     if (e.target.classList.contains('delete-btn')) {
       const { id } = e.target.dataset;
       if (confirm('Are you sure you want to delete this grade?')) {
@@ -116,5 +121,4 @@ document.addEventListener('DOMContentLoaded', () => {
 
   loadElever();
   loadFag();
-  loadKarakterer();
 });

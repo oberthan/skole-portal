@@ -14,6 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const editLaererSelect = editForm.elements.laerer;
 
   let laerere = [];
+  let userRole = '';
 
   const loadLaerere = async () => {
     try {
@@ -41,16 +42,31 @@ document.addEventListener('DOMContentLoaded', () => {
         klasser.forEach(klasse => {
           const row = document.createElement('tr');
           row.className = 'border-b cursor-pointer hover:bg-gray-100';
-          row.addEventListener('click', () => {
-            window.location.href = `/klasse.html?id=${klasse.id}`;
+          row.addEventListener('click', (e) => {
+            if (e.target.tagName !== 'BUTTON' && e.target.tagName !== 'svg' && e.target.tagName !== 'path') {
+                window.location.href = `/klasse.html?id=${klasse.id}`;
+            }
           });
+
+            let actionsHtml = '';
+            if (userRole === 'admin' || userRole === 'staff') {
+                actionsHtml = `
+                    <div class="relative">
+                        <button class="menu-btn p-2 rounded-full hover:bg-gray-200">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></svg>
+                        </button>
+                        <div class="menu-dropdown absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10 hidden">
+                            <button class="edit-btn block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" data-id="${klasse.id}" data-fag="${klasse.fag}" data-laerer="${klasse.lærer.id}">Edit</button>
+                            <button class="delete-btn block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" data-id="${klasse.id}">Delete</button>
+                        </div>
+                    </div>
+                `;
+            }
+
           row.innerHTML = `
             <td class="p-4">${klasse.fag}</td>
             <td class="p-4">${klasse.lærer.navn}</td>
-            <td class="p-4">
-              <button class="edit-btn bg-yellow-500 text-white px-2 py-1 rounded hover:bg-yellow-600" data-id="${klasse.id}" data-fag="${klasse.fag}" data-laerer="${klasse.lærer.id}">Edit</button>
-              <button class="delete-btn bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600" data-id="${klasse.id}">Delete</button>
-            </td>
+            <td class="p-4">${actionsHtml}</td>
           `;
           tableBody.appendChild(row);
         });
@@ -64,9 +80,11 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   document.addEventListener('userLoaded', (e) => {
-    if (user.rolle === 'admin' || user.rolle === 'staff') {
+    userRole = e.detail.rolle;
+    if (userRole === 'admin' || userRole === 'staff') {
       addBtn.classList.remove("hidden");
     }
+    loadKlasser();
   });
 
   addBtn.addEventListener('click', () => {
@@ -113,6 +131,12 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   tableBody.addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (e.target.classList.contains('menu-btn')) {
+        const dropdown = e.target.nextElementSibling;
+        dropdown.classList.toggle('hidden');
+    }
+
     if (e.target.classList.contains('edit-btn')) {
       const { id, fag, laerer } = e.target.dataset;
       editForm.elements.id.value = id;
@@ -178,5 +202,4 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   loadLaerere();
-  loadKlasser();
 });
