@@ -6,14 +6,17 @@ document.addEventListener('DOMContentLoaded', () => {
   const addForm = document.getElementById('add-klasse-form');
   const addFeedback = document.getElementById('add-klasse-feedback');
   const addLaererSelect = addForm.elements.laerer;
+  const addFagSelect = addForm.elements.fag;
 
   const editModal = document.getElementById('edit-klasse-modal');
   const closeEditBtn = document.getElementById('close-edit-modal');
   const editForm = document.getElementById('edit-klasse-form');
   const editFeedback = document.getElementById('edit-klasse-feedback');
   const editLaererSelect = editForm.elements.laerer;
+  const editFagSelect = editForm.elements.fag;
 
   let laerere = [];
+  let fag = [];
   let userRole = '';
 
   const loadLaerere = async () => {
@@ -27,6 +30,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
     } catch (error) {
       console.error('Error loading laerere data:', error);
+    }
+  };
+
+  const loadFag = async () => {
+    try {
+      const response = await fetch('/api/fag');
+      if (!response.ok) throw new Error('Failed to fetch fag');
+      fag = await response.json();
+
+      addFagSelect.innerHTML = fag.map(f => `<option value="${f.id}">${f.navn}</option>`).join('');
+      editFagSelect.innerHTML = fag.map(f => `<option value="${f.id}">${f.navn}</option>`).join('');
+
+    } catch (error) {
+      console.error('Error loading fag data:', error);
     }
   };
 
@@ -106,7 +123,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const payload = Object.fromEntries(new FormData(addForm).entries());
 
     try {
-      const res = await fetch('/api/addKlasse', {
+      const res = await fetch('/api/klasser/add', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
@@ -202,4 +219,5 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   loadLaerere();
+  loadFag();
 });
