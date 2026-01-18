@@ -63,7 +63,7 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   document.addEventListener('userLoaded', (e) => {
-    userRole = e.detail.rolle;
+    userRole = user.rolle;
     if (userRole === 'admin' || userRole === 'staff') {
       addBtn.classList.remove("hidden");
     }
