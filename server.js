@@ -11,14 +11,13 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 app.use(session({
-  secret: process.env.SESSION_SECRET || 'your-default-secret-for-development',
+  secret: process.env.SESSION_SECRET || 'En hemmelighed',
   resave: false,
   saveUninitialized: true,
   cookie: { secure: false }
 }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Middleware to check if user is authenticated
 const isAuthenticated = (req, res, next) => {
   if (req.session.user) {
     return next();
@@ -26,7 +25,6 @@ const isAuthenticated = (req, res, next) => {
   res.redirect('/login.html');
 };
 
-// Middleware for role-based access control
 const checkRole = (roles) => async (req, res, next) => {
   try {
     const userId = req.session.user.id;
@@ -191,7 +189,7 @@ app.get('/api/karakterer', isAuthenticated, async (req, res) => {
         const { data: profile, error: profileError } = await supabase.from('user_profiles').select('rolle').eq('id', userId).single();
         if (profileError) throw profileError;
 
-        let query = supabase.from('karakterer').select('id, karakter, elever(navn), fag(navn)');
+        let query = supabase.from('karakterer').select('karakter, elev(navn), fag(navn)');
         if (profile.rolle === 'student') {
             query = query.eq('elev', userId);
         }
@@ -418,7 +416,7 @@ app.get('/api/skema', isAuthenticated, async (req, res) => {
   try {
     const { data, error } = await supabase
       .from('skema')
-      .select('start, slut, klasser, lokale(id)')
+      .select('start, slut, klasse, lokale(id)')
       .order('start');
     if (error) throw error;
     res.json(data);

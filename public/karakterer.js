@@ -51,7 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
           row.innerHTML = `
-            <td class="p-4">${karakter.elever.navn}</td>
+            <td class="p-4">${karakter.elev.navn}</td>
             <td class="p-4">${karakter.fag.navn}</td>
             <td class="p-4">${karakter.karakter}</td>
             <td class="p-4">${actionsHtml}</td>
@@ -68,7 +68,7 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   document.addEventListener('userLoaded', (e) => {
-    userRole = e.detail.rolle;
+    userRole = user.rolle;
     if (userRole === 'admin' || userRole === 'staff') {
       addContainer.classList.remove("hidden");
     }
