@@ -89,7 +89,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const payload = Object.fromEntries(new FormData(addForm).entries());
 
     try {
-      const res = await fetch('/api/addElev', {
+      const res = await fetch('/api/elever/add', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
@@ -99,7 +99,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!res.ok) {
         addFeedback.textContent = `Error: ${data.error}`;
       } else {
-        addFeedback.innerHTML = `Elev "${data.elev.navn}" created!`;
+        addFeedback.innerHTML = `Elev "${data.elev.navn}" created!<br>They can log in with the username: "${data.email.split("@")[0]}"<br>and the password: "${data.password}"`;
         addForm.reset();
         setTimeout(() => {
           addModal.classList.add('hidden');

@@ -89,7 +89,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const payload = Object.fromEntries(new FormData(addForm).entries());
 
     try {
-      const res = await fetch('/api/addLaerer', {
+      const res = await fetch('/api/laerere/add', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
