@@ -24,28 +24,44 @@
                     <table class="w-full">
                         <thead>
                         <tr class="border-b">
-                            <th class="p-4 text-left">Klasse</th>
-                            <th class="p-4 text-left">Klasselærer</th>
+                            <th class="p-4 text-left">Fag</th>
+                            <th class="p-4 text-left">Lærer</th>
+                            <th class="p-4 text-left">Actions</th>
                         </tr>
                         </thead>
                         <tbody id="klasser-table-body">
                           <tr>
-                            <td colspan="2" class="p-4 text-center">Loading classes...</td>
+                            <td colspan="3" class="p-4 text-center">Loading classes...</td>
                           </tr>
                         </tbody>
                     </table>
                     <div id="add-klasse-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50">
                         <div class="w-full max-w-md rounded-lg bg-white p-6 shadow-lg" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
                             <div class="flex justify-between items-center mb-4">
-                                <h4 class="text-lg font-semibold">Tilføj ny elev</h4>
-                                <button id="close-klasse-modal" class="text-gray-500 hover:text-gray-700">&times;</button>
+                                <h4 class="text-lg font-semibold">Tilføj ny klasse</h4>
+                                <button id="close-add-modal" class="text-gray-500 hover:text-gray-700">&times;</button>
                             </div>
                             <form id="add-klasse-form" class="flex flex-col gap-3">
-                                <input type="text" name="l" placeholder="Navn" class="border p-2 rounded" required>
-                                <input type="number" name="aargang" placeholder="Årgang (efterlad tom for nuværende år)" class="border p-2 rounded" >
+                                <select name="fag" class="border p-2 rounded" required></select>
+                                <select name="laerer" class="border p-2 rounded" required></select>
                                 <button type="submit" class="bg-blue-500 text-white rounded px-3 py-2 hover:bg-blue-600">Tilføj</button>
                             </form>
-                            <div id="klasse-feedback" class="mt-2 text-sm text-red-500"></div>
+                            <div id="add-klasse-feedback" class="mt-2 text-sm text-red-500"></div>
+                        </div>
+                    </div>
+                    <div id="edit-klasse-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50">
+                        <div class="w-full max-w-md rounded-lg bg-white p-6 shadow-lg" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+                            <div class="flex justify-between items-center mb-4">
+                                <h4 class="text-lg font-semibold">Edit Klasse</h4>
+                                <button id="close-edit-modal" class="text-gray-500 hover:text-gray-700">&times;</button>
+                            </div>
+                            <form id="edit-klasse-form" class="flex flex-col gap-3">
+                                <input type="hidden" name="id">
+                                <select name="fag" class="border p-2 rounded" required></select>
+                                <select name="laerer" class="border p-2 rounded" required></select>
+                                <button type="submit" class="bg-blue-500 text-white rounded px-3 py-2 hover:bg-blue-600">Save Changes</button>
+                            </form>
+                            <div id="edit-klasse-feedback" class="mt-2 text-sm text-red-500"></div>
                         </div>
                     </div>
                 </div>

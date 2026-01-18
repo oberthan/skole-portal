@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Fravær</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
+    <div id="sidebar-container"></div>
+    <div class="flex flex-col">
+        <div id="header-container"></div>
+        <main class="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">
+            <div class="rounded-lg border bg-card text-card-foreground shadow-sm">
+                <div class="p-6">
+                    <h3 class="text-lg font-semibold">Fravær</h3>
+                </div>
+                <div class="p-6 pt-0">
+                    <table class="w-full">
+                        <thead>
+                        <tr class="border-b">
+                            <th class="p-4 text-left">Elev</th>
+                            <th class="p-4 text-left">Fag</th>
+                            <th class="p-4 text-left">Dato</th>
+                            <th class="p-4 text-left">Til stede</th>
+                            <th class="p-4 text-left">Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody id="fravaer-table-body">
+                          <tr>
+                            <td colspan="5" class="p-4 text-center">Loading fravær...</td>
+                          </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div id="add-fravaer-container" class="hidden rounded-lg border bg-card text-card-foreground shadow-sm">
+                <div class="p-6">
+                    <h3 class="text-lg font-semibold">Tilføj fravær</h3>
+                </div>
+                <div class="p-6 pt-0">
+                    <form id="add-fravaer-form" class="flex flex-col gap-3">
+                        <select name="elev" class="border p-2 rounded" required></select>
+                        <select name="fag" class="border p-2 rounded" required></select>
+                        <input type="date" name="dato" class="border p-2 rounded" required>
+                        <input type="checkbox" name="til_stede" class="border p-2 rounded">
+                        <button type="submit" class="bg-blue-500 text-white rounded px-3 py-2 hover:bg-blue-600">Tilføj</button>
+                    </form>
+                    <div id="add-fravaer-feedback" class="mt-2 text-sm text-red-500"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+<script src="layout.js"></script>
+<script src="fravaer.js"></script>
+</body>
+</html>

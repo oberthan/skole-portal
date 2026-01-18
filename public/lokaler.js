@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       lokaler.forEach(lokale => {
         const listItem = document.createElement('li');
         listItem.className = 'p-2 border-b';
-        listItem.textContent = lokale.navn;
+        listItem.textContent = lokale.id;
         list.appendChild(listItem);
       });
     } else {
