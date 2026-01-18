@@ -63,4 +63,7 @@ router.get('/fravaer', isAuthenticated, (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'public', 'fravaer.html'));
 });
 
+router.get('/health-check',(req, res) => {
+    res.status(200).send();
+});
 module.exports = router;
