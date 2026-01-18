@@ -42,7 +42,7 @@
                                 <button id="close-add-modal" class="text-gray-500 hover:text-gray-700">&times;</button>
                             </div>
                             <form id="add-klasse-form" class="flex flex-col gap-3">
-                                <input type="text" name="fag" placeholder="Fag" class="border p-2 rounded" required>
+                                <select name="fag" class="border p-2 rounded" required></select>
                                 <select name="laerer" class="border p-2 rounded" required></select>
                                 <button type="submit" class="bg-blue-500 text-white rounded px-3 py-2 hover:bg-blue-600">Tilføj</button>
                             </form>
@@ -57,7 +57,7 @@
                             </div>
                             <form id="edit-klasse-form" class="flex flex-col gap-3">
                                 <input type="hidden" name="id">
-                                <input type="text" name="fag" placeholder="Fag" class="border p-2 rounded" required>
+                                <select name="fag" class="border p-2 rounded" required></select>
                                 <select name="laerer" class="border p-2 rounded" required></select>
                                 <button type="submit" class="bg-blue-500 text-white rounded px-3 py-2 hover:bg-blue-600">Save Changes</button>
                             </form>
